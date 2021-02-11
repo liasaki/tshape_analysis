@@ -105,16 +105,16 @@ def doIt():
   #find the unique IDs among all files
   ids = set(i[1][0] for i in file_list)
 
-  print "Got data for", len(ids), "unique id(s).", ids
+  print("Got data for", len(ids), "unique id(s).", ids)
 
   #open csv file for data output and write header information
-  with open(output_file, 'wb') as f:
+  with open(output_file, 'w') as f:
     writer = csv.writer(f)
     writer.writerow(["ID", "symbol", "repetition", "MCI", "procrustes", "real_1", "imag_1", "mod_1", "real_2", "imag_2", "mod_2", "real_3", "imag_3", "mod_3"])
 
     for current_id in ids:
 
-      print "Processing data for", current_id
+      print("Processing data for", current_id)
 
       #filter to get the files relevant to the current id
       current_files = [(i[0],i[1][1]) for i in file_list if i[1][0] == current_id]
@@ -124,7 +124,7 @@ def doIt():
 
       #check that there is either 0 or 1 resting shape file
       if len(rest_file) == 0:
-        print "No resting shape found for", current_id, ", Procrustes analysis not available"
+        print("No resting shape found for", current_id, ", Procrustes analysis not available")
         doProcrustes = False
       elif len(rest_file) == 1:
         doProcrustes = True
@@ -132,7 +132,7 @@ def doIt():
         #there should only be one shape in the resting shape file
         if rdata.shape[1] != 2:
           raise IOError("There should be one and only one shape in the resting shape file")
-        print "Found resting shape"
+        print("Found resting shape")
       else:
         assert False, "This can't happen"
 
@@ -147,7 +147,8 @@ def doIt():
 
         if data.shape[1]%2 != 0: raise IOError("Number of data columns not a multiple of 2 in "+str(file_name))
         num_reps = data.shape[1]/2
-        print "Found", num_reps, "shapes for", symbol
+        num_reps = int(num_reps)
+        print("Found", num_reps, "shapes for", symbol)
 
         for rep in range(0, num_reps):
 
@@ -155,7 +156,7 @@ def doIt():
 
           #check for NaNs
           if (np.isnan(np.sum(data[:,j:j+2]))):
-            print "NaN in shape", r, "ignoring..."
+            print("NaN in shape", r, "ignoring...")
             continue
 
           if doProcrustes:
